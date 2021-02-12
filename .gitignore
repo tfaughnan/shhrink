@@ -1,4 +1,5 @@
 env/
 instance/
+__pycache__/
 TODO.md
 
