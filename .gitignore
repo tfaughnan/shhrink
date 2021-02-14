@@ -1,5 +1,6 @@
 env/
 instance/
 __pycache__/
+*.db
 TODO.md
 
