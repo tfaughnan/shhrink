@@ -38,16 +38,15 @@ class ShhrinkDb:
         c.execute(
             'SELECT * FROM shhrink WHERE urlin=?',
             (urlin,))
-        print(c.fetchone())
+        return c.fetchone()
         
-        #if urlin in db:
-            #return urlout
-        #else:
-            #return None
-
     def select_by_urlout(self, urlout):
-        pass
-
+        c = self.conn.cursor()
+        c.execute(
+            'SELECT * FROM shhrink WHERE urlout=?',
+            (urlout,))
+        return c.fetchone()
+ 
     def increment_clicks(self, urlout):
         pass
 

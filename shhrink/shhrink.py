@@ -24,13 +24,19 @@ def index():
 
         if error is None:
             # TODO: do the shortening and add to database
+            db = get_db()
+
+            query = db.select_by_urlin(urlin)
+            if query:
+                urlout = query[3]
+            else:
+                urlout = shorten_url(urlin)
+                db.add_entry(urlin, urlout)
+
             print('we good homie')
             print(f'INPUT: {urlin}')
-            urlout = shorten_url(urlin)
             print(f'OUTPUT: {urlout}')
 
-            db = get_db()
-            db.add_entry(urlin, urlout)
         else:
             print('nah fam that aint it')
             flash(error)
