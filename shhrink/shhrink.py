@@ -4,7 +4,7 @@ from random import randrange
 # TODO: reevaluate which imports are actually needed
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
-from shhrink.db import get_db
+from shhrink.db_utils import get_db
 
 bp = Blueprint('shhrink', __name__)
 
@@ -14,7 +14,6 @@ def index():
     urlout=''
     if request.method == 'POST':
         urlin = request.form['urlin']
-        db = get_db()
         error = None
         
         if not urlin:
@@ -25,10 +24,19 @@ def index():
 
         if error is None:
             # TODO: do the shortening and add to database
+            db = get_db()
+
+            query = db.select_by_urlin(urlin)
+            if query:
+                urlout = query[3]
+            else:
+                urlout = shorten_url(urlin)
+                db.add_entry(urlin, urlout)
+
             print('we good homie')
             print(f'INPUT: {urlin}')
-            urlout = shorten_url(urlin)
             print(f'OUTPUT: {urlout}')
+
         else:
             print('nah fam that aint it')
             flash(error)
@@ -39,6 +47,4 @@ def shorten_url(url):
     BASE = 'https://shhr.ink/'
     key = str(randrange(0, 1000)).zfill(3)
     return BASE + key
-    
-
 

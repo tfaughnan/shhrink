@@ -12,6 +12,9 @@
             <label for="urlout" >Output:</label>
             <input type="text" id="urlout" name="urlout" value="{{urlout}}">
         </form>
+        {% for message in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
     </body>
 </html>
 
