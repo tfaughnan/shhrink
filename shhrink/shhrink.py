@@ -9,6 +9,7 @@ from shhrink.db_utils import get_db
 # TODO: these should be set by config, loaded in __init__.py
 BASE_URL = 'https://shhr.ink'
 MAX_ATTEMPTS = 10
+SYMBOLS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 bp = Blueprint('shhrink', __name__)
 
@@ -72,6 +73,14 @@ def generate_urlout(urlin, attempts=0):
     return urlout
 
 def generate_key(urlin):
-    key = str(randrange(0, 1000)).zfill(3)
+    # TODO: don't hardcode 3 below
+    key = ''
+    N = len(SYMBOLS)
+    n = randrange(0, N**3)
+    print(n)
+    while n:
+        n, r = divmod(n, N)
+        key = SYMBOLS[r] + key
+    print(key)
     return key
 
