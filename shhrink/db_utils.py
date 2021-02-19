@@ -47,5 +47,13 @@ class ShhrinkDb:
         return c.fetchone()
  
     def increment_clicks(self, urlout):
-        pass
+        query = self.select_by_urlout(urlout)
+        id_ = query[0]
+        clicks = query[4]
+
+        with self.conn:
+            c = self.conn.cursor()
+            c.execute(
+                'UPDATE shhrink SET clicks=? WHERE id=?',
+                (clicks + 1, id_))
 

@@ -36,13 +36,7 @@ def index():
 
                 if error is None:
                     db.add_entry(urlin, urlout)
-
-            print('we good homie')
-            print(f'INPUT: {urlin}')
-            print(f'OUTPUT: {urlout}')
-
         if error:
-            print('nah fam that aint it')
             flash(error)
 
     return render_template('index.html', urlout=urlout)
@@ -50,13 +44,12 @@ def index():
 @bp.route('/<key>')
 def redirection(key):
     urlout = f'{BASE_URL}/{key}'
-    print(f'{urlout=}')
     db = get_db()
     query = db.select_by_urlout(urlout)
-    print(f'{query=}')
     if query:
         urlin = query[2]
         r = redirect(urlin)
+        db.increment_clicks(urlout)
     else:
         r = redirect('/')
     return r
@@ -77,10 +70,8 @@ def generate_key(urlin):
     key = ''
     N = len(SYMBOLS)
     n = randrange(0, N**3)
-    print(n)
     while n:
         n, r = divmod(n, N)
         key = SYMBOLS[r] + key
-    print(key)
     return key
 
