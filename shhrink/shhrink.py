@@ -6,7 +6,10 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
 
 from shhrink.db_utils import get_db
 
+# TODO: these should be set by config, loaded in __init__.py
 BASE_URL = 'https://shhr.ink'
+MAX_ATTEMPTS = 10
+
 bp = Blueprint('shhrink', __name__)
 
 # TODO: is GET really necessary?
@@ -16,29 +19,28 @@ def index():
     if request.method == 'POST':
         urlin = request.form['urlin']
         error = None
-        
+
+        # TODO: neaten this mess up!        
         if not urlin:
             error = 'enter a url'
-        # TODO: also check if url is *valid*, e.g. by pinging it or something idk
-        elif False:
-            error = 'invalid url'
-
-        if error is None:
-            # TODO: do the shortening and add to database
+        else:
             db = get_db()
-
             query = db.select_by_urlin(urlin)
             if query:
                 urlout = query[3]
             else:
                 urlout = generate_urlout(urlin)
-                db.add_entry(urlin, urlout)
+                if urlout is None:
+                    error = 'unable to generate valid key'
+
+                if error is None:
+                    db.add_entry(urlin, urlout)
 
             print('we good homie')
             print(f'INPUT: {urlin}')
             print(f'OUTPUT: {urlout}')
 
-        else:
+        if error:
             print('nah fam that aint it')
             flash(error)
 
@@ -58,9 +60,15 @@ def redirection(key):
         r = redirect('/')
     return r
 
-def generate_urlout(urlin):
-    key = generate_key(urlin)
-    urlout = f'{BASE_URL}/{key}'
+def generate_urlout(urlin, attempts=0):
+    if attempts < MAX_ATTEMPTS:
+        key = generate_key(urlin)
+        urlout = f'{BASE_URL}/{key}'
+        db = get_db()
+        if db.select_by_urlout(urlout):
+            urlout = generate_urlout(urlin, attempts=attempts+1)
+    else:
+        urlout = None
     return urlout
 
 def generate_key(urlin):
