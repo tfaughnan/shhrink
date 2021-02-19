@@ -5,7 +5,6 @@ from flask import current_app
 
 def get_db():
     db = ShhrinkDb(current_app.config['DATABASE'])
-    print(db.path)
     return db
 
 class ShhrinkDb:

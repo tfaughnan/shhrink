@@ -6,6 +6,7 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
 
 from shhrink.db_utils import get_db
 
+BASE_URL = 'https://shhr.ink'
 bp = Blueprint('shhrink', __name__)
 
 # TODO: is GET really necessary?
@@ -43,8 +44,21 @@ def index():
 
     return render_template('index.html', urlout=urlout)
 
+@bp.route('/<key>')
+def redirection(key):
+    urlout = BASE_URL + '/' + key
+    print(f'{urlout=}')
+    db = get_db()
+    query = db.select_by_urlout(urlout)
+    print(f'{query=}')
+    if query:
+        urlin = query[2]
+        r = redirect(urlin)
+    else:
+        r = redirect('/')
+    return r
+
 def shorten_url(url):
-    BASE = 'https://shhr.ink/'
     key = str(randrange(0, 1000)).zfill(3)
-    return BASE + key
+    return BASE_URL + '/' + key
 

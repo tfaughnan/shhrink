@@ -19,15 +19,8 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-#    @app.route('/hello')
-#    def hello():
-#        return 'Hello, World!'
-
     from shhrink import shhrink
     app.register_blueprint(shhrink.bp)
-
-#    from shhrink.db import ShhrinkDb
-#    db = ShhrinkDb('shhrink.db')
 
     return app
 
