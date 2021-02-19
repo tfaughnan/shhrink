@@ -31,7 +31,7 @@ def index():
             if query:
                 urlout = query[3]
             else:
-                urlout = shorten_url(urlin)
+                urlout = generate_urlout(urlin)
                 db.add_entry(urlin, urlout)
 
             print('we good homie')
@@ -46,7 +46,7 @@ def index():
 
 @bp.route('/<key>')
 def redirection(key):
-    urlout = BASE_URL + '/' + key
+    urlout = f'{BASE_URL}/{key}'
     print(f'{urlout=}')
     db = get_db()
     query = db.select_by_urlout(urlout)
@@ -58,7 +58,12 @@ def redirection(key):
         r = redirect('/')
     return r
 
-def shorten_url(url):
+def generate_urlout(urlin):
+    key = generate_key(urlin)
+    urlout = f'{BASE_URL}/{key}'
+    return urlout
+
+def generate_key(urlin):
     key = str(randrange(0, 1000)).zfill(3)
-    return BASE_URL + '/' + key
+    return key
 
