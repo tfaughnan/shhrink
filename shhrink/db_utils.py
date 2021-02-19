@@ -57,3 +57,8 @@ class ShhrinkDb:
                 'UPDATE shhrink SET clicks=? WHERE id=?',
                 (clicks + 1, id_))
 
+    def executescript(self, sql):
+        with self.conn:
+            c = self.conn.cursor()
+            c.executescript(sql)
+
