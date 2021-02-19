@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>shhrink!</title>
+        <title>shhr.ink</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-        <h1>Welcome to shhr.ink!</h1>
-        <form method="post" autocomplete="off">
-            <label for="urlin" >Input:</label>
-            <input type="text" id="urlin" name="urlin" placeholder="long URL" autofocus>
-            <input type="submit" value="submit"><br><br>
-            <label for="urlout" >Output:</label>
-            <input type="text" id="urlout" name="urlout" value="{{urlout}}">
-        </form>
+    <div id="wrapper">
+        <div id="figlet">
+            <pre>
+    _    _         _      _   
+ __| |_ | |_  _ _ (_)_ _ | |__
+(_-< ' \| ' \| '_|| | ' \| / /
+/__/_||_|_||_|_|(_)_|_||_|_\_\
+            </pre>
+        </div>
+        <div class="container">
+            <form method="post" autocomplete="off">
+                <table>
+                    <tr>
+                        <td align="left"><label for="urlin" >Input:</label></td>
+                        <td align="right"><input type="text" id="urlin" name="urlin" placeholder="long URL" autofocus></td>
+                        <td align="right"><input type="submit" value="->"></td>
+                    </tr>
+                    <tr>
+                        <td align="left"><label for="urlout" >Output:</label></td>
+                        <td align="right"><input type="text" id="urlout" name="urlout" value="{{urlout}}"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
         {% for message in get_flashed_messages() %}
             <div class="flash">{{ message }}</div>
         {% endfor %}
+    </div>
     </body>
 </html>
 

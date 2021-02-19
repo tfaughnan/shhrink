@@ -1,0 +1,33 @@
+#wrapper {
+    width: 800px;
+    margin: 0 auto;
+}
+
+#figlet {
+    text-align: center;
+}
+
+/*
+.container {
+    margin: 0 auto;
+    text-align: center;
+}
+*/
+
+form {}
+
+table {
+    margin: 0 auto;
+}
+
+
+label {
+    font-family: monospace;
+}
+
+input {
+    font-family: monospace;
+}
+
+
+
