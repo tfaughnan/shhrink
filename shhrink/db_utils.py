@@ -3,8 +3,11 @@ import time
 
 from flask import current_app
 
-def get_db():
-    db = ShhrinkDb(current_app.config['DATABASE'])
+def get_db(path=None):
+    if path is None:
+        db = ShhrinkDb(current_app.config['DATABASE'])
+    else:
+        db = ShhrinkDb(path)
     return db
 
 class ShhrinkDb:
