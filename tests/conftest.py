@@ -18,7 +18,7 @@ def app():
         'DATABASE': db_path
         })
     
-    db = get_db()
+    db = get_db(db_path)
     db.executescript(sql)
 
     yield app
