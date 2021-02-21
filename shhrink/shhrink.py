@@ -23,7 +23,7 @@ def index():
 
         # TODO: neaten this mess up!        
         if not urlin:
-            error = 'enter a url'
+            error = 'Error: please input a URL'
         else:
             db = get_db()
             query = db.select_by_urlin(urlin)
