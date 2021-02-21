@@ -3,6 +3,7 @@
     margin: 0 auto;
     text-align: center;
     font-family: monospace;
+    font-size: 125%;
 }
 
 #figlet {
@@ -50,6 +51,7 @@ label {
 
 input {
     font-family: monospace;
+    font-size: 100%;
 }
 
 /*
