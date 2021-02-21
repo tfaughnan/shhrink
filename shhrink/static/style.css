@@ -2,11 +2,25 @@
     width: 100%;
     margin: 0 auto;
     text-align: center;
+    font-family: monospace;
 }
 
 #figlet {
     text-align: center;
 }
+
+.btn {
+    width: 100%;
+}
+
+/*
+#submit {
+    font-family: monospace;
+    background-color: grey;
+    border-radius: 12px;
+    color: blue;
+}
+*/
 
 .flash {
     text-align: center;
@@ -24,8 +38,6 @@
     text-align: center;
 }
 */
-
-form {}
 
 table {
     margin: 0 auto;
