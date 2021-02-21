@@ -54,6 +54,16 @@ input {
     font-size: 100%;
 }
 
+.tdtextinput {
+}
+
+
+input[type="text"] {
+    width: 14em;
+}
+
+
+
 /*
 @media only screen and (max-width: 1000px) {
     label {
