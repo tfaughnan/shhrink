@@ -22,7 +22,6 @@
         <div class="container">
             <form id="main-form" method="post" enctype="multipart/form-data" autocomplete="off">
                 <div class="form-row">
-                    <label class="label-left" for="urlin" >Input:</label>
                     <input id="filein" type="file" name="filein">
                     <button id="filein-upload" class="btn" type="button" onclick="proxyClick('filein')">
                         <!--<i class="fas fa-cloud-upload-alt"></i>-->
@@ -38,7 +37,6 @@
                     </button>
                 </div>
                 <div class="form-row">
-                    <label class="label-left" for="urlout" >Output:</label>
                     <input class="input-url" type="text" id="urlout" name="urlout" value="{{urlout}}" placeholder="shhr.ink URL" readonly>
                     <button id="copy" class="btn" type="button" onclick="copyUrlout()">
                         <i class="far fa-clone fa-lg"></i>

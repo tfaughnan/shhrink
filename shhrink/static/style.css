@@ -15,12 +15,6 @@ body, input {
     margin-bottom: 1cm;
 }
 
-.form-row .label-left {
-    flex: 0 0 auto;
-    display: block;
-    width: 75px;
-}
-
 .form-row .input-url {
     flex: 1 1 auto;
     display: block;
