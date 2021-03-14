@@ -13,33 +13,39 @@ SYMBOLS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 bp = Blueprint('shhrink', __name__)
 
-# TODO: is GET really necessary?
 @bp.route('/', methods=('GET', 'POST'))
 def index():
     urlout=''
     if request.method == 'POST':
-        urlin = request.form['urlin']
-        error = None
-
-        if urlin:
-            db = get_db()
-            query = db.select_by_urlin(urlin)
-            if query:
-                urlout = query[3]
-            else:
-                urlout = generate_urlout(urlin)
-                if urlout is None:
-                    error = 'unable to generate valid key'
-
-                if error is None:
-                    db.add_entry(urlin, urlout)
-
-
-        if error:
-            pass
-            #flash(error)
+        urlout = handle_url_post(request.form['urlin'])
 
     return render_template('index.html', urlout=urlout)
+        
+def handle_url_post(urlin):
+    urlout = ''
+    if urlin:
+        db = get_db()
+        query = db.select_by_urlin(urlin)
+        if query:
+            urlout = query[3]
+        else:
+            urlout = generate_urlout(urlin)
+            if urlout:
+                db.add_entry(urlin, urlout)
+
+    return urlout
+
+@bp.route('/url', methods=('GET', 'POST'))
+def url_endpoint():
+    urlout = ''
+    if request.method == 'POST':
+        try:
+            urlin = list(request.form)[0]
+            urlout = handle_url_post(urlin)
+        except IndexError as e:
+            pass
+
+    return urlout
 
 @bp.route('/<key>')
 def redirection(key):
@@ -48,11 +54,11 @@ def redirection(key):
     query = db.select_by_urlout(urlout)
     if query:
         urlin = query[2]
-        r = redirect(urlin)
+        redir = redirect(urlin)
         db.increment_clicks(urlout)
     else:
-        r = redirect('/')
-    return r
+        redir = redirect('/')
+    return redir
 
 def generate_urlout(urlin, attempts=0):
     if attempts < MAX_ATTEMPTS:
