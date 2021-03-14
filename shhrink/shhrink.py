@@ -21,10 +21,7 @@ def index():
         urlin = request.form['urlin']
         error = None
 
-        # TODO: neaten this mess up!        
-        if not urlin:
-            error = 'Error: please input a URL'
-        else:
+        if urlin:
             db = get_db()
             query = db.select_by_urlin(urlin)
             if query:
@@ -36,8 +33,11 @@ def index():
 
                 if error is None:
                     db.add_entry(urlin, urlout)
+
+
         if error:
-            flash(error)
+            pass
+            #flash(error)
 
     return render_template('index.html', urlout=urlout)
 
