@@ -30,6 +30,7 @@ body, input {
 .form-row .btn {
     flex: 0 0 auto;
     display: block;
+    text-align: center;
 }
 
 #filein-upload, #filein-delete {
