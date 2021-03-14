@@ -11,7 +11,6 @@
         <title>shhr.ink</title>
     </head>
     <body>
-    <div id="wrapper">
         <div id="figlet">
             <pre>
     _    _         _      _   
@@ -21,40 +20,32 @@
             </pre>
         </div>
         <div class="container">
-            <form id="oneform" method="post" enctype="multipart/form-data" autocomplete="off">
-                <table>
-                    <tr>
-                        <td align="left">
-                            <label for="urlin" >Input:</label>
-                        </td>
-                        <td align="right">
-                            <input type="file" id="filein" name="filein">
-                            <input type="text" id="urlin" name="urlin" placeholder="long URL or file upload" autofocus>
-                            <label for="filein" id="filein-upload">
-                                <!--<i class="fas fa-cloud-upload-alt"></i>-->
-                                <!--<i class="fas fa-file"></i>-->
-                                <i class="fas fa-file-upload"></i>
-                            </label>
-                            <span id="filein-delete">
-                                <i class="far fa-trash-alt"></i>
-                            </span>
-                        </td>
-                        <td align="right">
-                            <input type="submit" class="btn" id="submit" value="-->">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="left">
-                            <label for="urlout" >Output:</label>
-                        </td>
-                        <td align="right">
-                            <input type="text" id="urlout" name="urlout" value="{{urlout}}" placeholder="shhr.ink URL" readonly>
-                        </td>
-                        <td align="right">
-                            <input type="button" class="btn" id="copy" onclick="copyUrlout()" value="copy">
-                        </td>
-                    </tr>
-                </table>
+            <form id="main-form" method="post" enctype="multipart/form-data" autocomplete="off">
+                <div class="form-row">
+                    <label class="label-left" for="urlin" >Input:</label>
+                    <input class="input-url" type="text" id="urlin" name="urlin" placeholder="long URL or file upload" autofocus>
+                    <input id="filein" type="file" name="filein">
+                    <button id="filein-upload" class="btn" type="button" onclick="proxyClick('filein')">
+                        <!--<i class="fas fa-cloud-upload-alt"></i>-->
+                        <!--<i class="fas fa-file"></i>-->
+                        <i class="fas fa-file-upload"></i>
+                    </button>
+                    <!--<span id="filein-delete" class="btn">-->
+                    <button id="filein-delete" class="btn" type="button">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                    <!--</span>-->
+                    <button id="submit" class="btn" type="submit" form="main-form">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="form-row">
+                    <label class="label-left" for="urlout" >Output:</label>
+                    <input class="input-url" type="text" id="urlout" name="urlout" value="{{urlout}}" placeholder="shhr.ink URL" readonly>
+                    <button id="copy" class="btn" type="button" onclick="copyUrlout()">
+                        COPY
+                    </button>
+                </div>
             </form>
         </div>
         {% for message in get_flashed_messages() %}
@@ -78,7 +69,6 @@
             <p>MISSION <i class="fas fa-scroll"></i><i class="fas fa-bullseye"></i>(link)</p>
             <p>FAQ <i class="far fa-question-circle"></i> (link)</p>
         </footer>
-    </div>
     </body>
 </html>
 

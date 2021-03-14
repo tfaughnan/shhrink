@@ -4,6 +4,10 @@ function copyUrlout() {
     document.execCommand('copy');
 }
 
+function proxyClick(id) {
+    document.getElementById(id).click();
+}
+
 function fmtBytes(bytes) {
     if (bytes == 0) {
         return '0 B';

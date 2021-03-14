@@ -1,4 +1,4 @@
-pre {
+body, input {
     font-family: monospace;
 }
 
@@ -6,38 +6,64 @@ pre {
     text-align: center;
 }
 
-#wrapper {
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-    font-family: monospace;
-    font-size: 125%;
+.form-row {
+    display: flex;
+    flex-direction: row;
+    width: 25%;
+    margin: auto;
 }
 
+.form-row .label-left {
+    flex: 0 0 auto;
+    display: block;
+    width: 75px;
+}
+
+.form-row .input-url {
+    flex: 1 1 auto;
+    display: block;
+}
+
+.form-row .btn {
+    flex: 0 0 auto;
+    display: block;
+}
+
+#filein-upload, #filein-delete {
+    display: inline-block;
+    cursor: pointer;
+    width: 25px;
+    text-align: center;
+}
+
+#submit {
+    width: 25px;
+}
+
+#submit {
+    width: 25px;
+}
+
+#copy {
+    width: 50px;
+}
+
+/*
 .btn {
     width: 100%;
 }
+*/
 
 input[type="file"] {
     display: none;
 }
 
-#urlin {
-}
-
-#filein-upload {
-    display: inline-block;
-    cursor: pointer;
-}
-
-#filein-delete {
-    display: inline-block;
-    cursor: pointer;
-}
-
 input:read-only {
     background-color: thistle;
 }
+
+
+
 
 /*
 #submit {
@@ -48,6 +74,7 @@ input:read-only {
 }
 */
 
+/*
 .flash {
     text-align: center;
     font-family: monospace;
@@ -57,30 +84,14 @@ input:read-only {
     position: relative;
     padding: 2px;
 }
+*/
 
 /*
 .container {
-    margin: 0 auto;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
 }
 */
-
-table {
-    margin: 0 auto;
-}
-
-label {
-    font-family: monospace;
-}
-
-input {
-    font-family: monospace;
-    font-size: 100%;
-}
-
-input[type="text"] {
-    width: 14em;
-}
 
 a:link {
     color: black;
