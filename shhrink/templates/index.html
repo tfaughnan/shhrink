@@ -23,27 +23,25 @@
             <form id="main-form" method="post" enctype="multipart/form-data" autocomplete="off">
                 <div class="form-row">
                     <label class="label-left" for="urlin" >Input:</label>
-                    <input class="input-url" type="text" id="urlin" name="urlin" placeholder="long URL or file upload" autofocus>
                     <input id="filein" type="file" name="filein">
                     <button id="filein-upload" class="btn" type="button" onclick="proxyClick('filein')">
                         <!--<i class="fas fa-cloud-upload-alt"></i>-->
                         <!--<i class="fas fa-file"></i>-->
-                        <i class="fas fa-file-upload"></i>
+                        <i class="fas fa-file-upload fa-lg"></i>
                     </button>
-                    <!--<span id="filein-delete" class="btn">-->
                     <button id="filein-delete" class="btn" type="button">
                         <i class="far fa-trash-alt"></i>
                     </button>
-                    <!--</span>-->
+                    <input class="input-url" type="text" id="urlin" name="urlin" placeholder="enter URL or upload file" autofocus>
                     <button id="submit" class="btn" type="submit" form="main-form">
-                        <i class="fas fa-chevron-right"></i>
+                        <i class="fas fa-chevron-right fa-lg"></i>
                     </button>
                 </div>
                 <div class="form-row">
                     <label class="label-left" for="urlout" >Output:</label>
                     <input class="input-url" type="text" id="urlout" name="urlout" value="{{urlout}}" placeholder="shhr.ink URL" readonly>
                     <button id="copy" class="btn" type="button" onclick="copyUrlout()">
-                        COPY
+                        <i class="far fa-clone fa-lg"></i>
                     </button>
                 </div>
             </form>

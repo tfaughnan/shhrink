@@ -1,5 +1,6 @@
 body, input {
     font-family: monospace;
+    font-size: 16px;
 }
 
 #figlet {
@@ -9,8 +10,9 @@ body, input {
 .form-row {
     display: flex;
     flex-direction: row;
-    width: 25%;
+    width: 30%;
     margin: auto;
+    margin-bottom: 1cm;
 }
 
 .form-row .label-left {
@@ -22,6 +24,7 @@ body, input {
 .form-row .input-url {
     flex: 1 1 auto;
     display: block;
+    padding: 7px;
 }
 
 .form-row .btn {
@@ -32,27 +35,17 @@ body, input {
 #filein-upload, #filein-delete {
     display: inline-block;
     cursor: pointer;
-    width: 25px;
+    width: 35px;
     text-align: center;
 }
 
 #submit {
-    width: 25px;
-}
-
-#submit {
-    width: 25px;
+    width: 35px;
 }
 
 #copy {
-    width: 50px;
+    width: 35px;
 }
-
-/*
-.btn {
-    width: 100%;
-}
-*/
 
 input[type="file"] {
     display: none;
@@ -61,18 +54,6 @@ input[type="file"] {
 input:read-only {
     background-color: thistle;
 }
-
-
-
-
-/*
-#submit {
-    font-family: monospace;
-    background-color: grey;
-    border-radius: 12px;
-    color: blue;
-}
-*/
 
 /*
 .flash {
