@@ -3,8 +3,10 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤠</text></svg>">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="https://kit.fontawesome.com/8063d6bd5d.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script> var maxFileBytes = {{ max_file_bytes|tojson }} </script>
         <script type="text/javascript" src=" {{ url_for('static', filename='index.js') }} "></script>
         <title>shhr.ink</title>
     </head>
@@ -19,17 +21,22 @@
             </pre>
         </div>
         <div class="container">
-            <form method="post" enctype="multipart/form-data" autocomplete="off">
+            <form id="oneform" method="post" enctype="multipart/form-data" autocomplete="off">
                 <table>
                     <tr>
-                        <td></tr>
                         <td align="left"><label for="urlin" >Input:</label></td>
                         <td class="tdtextinput" align="right">
-                            <label for="filein" id="filelin-label">
-                                foo
-                            </label>
                             <input type="file" id="filein" name="filein">
-                            <input type="text" id="urlin" name="urlin" placeholder="long URL" autofocus></td>
+                            <input type="text" id="urlin" name="urlin" placeholder="long URL or file upload" autofocus>
+                            <label for="filein" id="filein-upload">
+                                <!--<i class="fas fa-cloud-upload-alt"></i>-->
+                                <!--<i class="fas fa-file"></i>-->
+                                <i class="fas fa-file-upload"></i>
+                            </label>
+                            <span id="filein-delete">
+                                <i class="far fa-trash-alt"></i>
+                            </span>
+                        </td>
                         <td align="right"><input type="submit" class="btn" id="submit" value="-->"></td>
                     </tr>
                     <tr>
@@ -43,10 +50,23 @@
         {% for message in get_flashed_messages() %}
             <div class="flash">{{ message }}</div>
         {% endfor %}
+        <hr>
+        ---
         <footer>
-            <a href="https://github.com/tfaughnan/shhrink">
-                contribute <i class="fa fa-github"></i>
-            </a>
+            <p>
+                <a href="https://github.com/tfaughnan/shhrink">
+                    contribute
+                    <i class="fa fa-github"></i>
+                    <i class="fab fa-github"></i>
+                    <i class="fab fa-github-square"></i>
+                    <i class="fab fa-git-alt"></i>
+                    <i class="fas fa-code-branch"></i>
+                </a>
+            </p>
+            <p><i class="far fa-copyright"></i> (C) (c) 2021 Thomas Faughnan</p>
+            <p>LICENSE <i class="fas fa-award"></i> (link)</p>
+            <p>MISSION <i class="fas fa-scroll"></i><i class="fas fa-bullseye"></i>(link)</p>
+            <p>FAQ <i class="far fa-question-circle"></i> (link)</p>
         </footer>
     </div>
     </body>

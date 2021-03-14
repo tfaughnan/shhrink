@@ -13,6 +13,7 @@ BASE_URL = 'https://shhr.ink'
 # TODO: mkdir for below if needed
 UPLOAD_FOLDER = '/tmp/shhrink-uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+MAX_FILE_BYTES = 10_000_000
 MAX_ATTEMPTS = 10
 SYMBOLS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -27,7 +28,7 @@ def index():
         else: 
             urlout = handle_url_post(request.form['urlin'])
 
-    return render_template('index.html', urlout=urlout)
+    return render_template('index.html', urlout=urlout, max_file_bytes=MAX_FILE_BYTES)
         
 def handle_url_post(urlin):
     urlout = ''
@@ -37,7 +38,7 @@ def handle_url_post(urlin):
         if query:
             key = query[2]
         else:
-            key = generate_key(urlin)
+            key = generate_key()
             if key:
                 db.add_entry(key, urlin, type_='url')
         urlout = urlout_from_key(key)

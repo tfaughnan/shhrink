@@ -29,6 +29,15 @@ input[type="file"] {
     cursor: pointer;
 }
 
+#filein-delete {
+    display: inline-block;
+    cursor: pointer;
+}
+
+input:read-only {
+    background-color: thistle;
+}
+
 /*
 #submit {
     font-family: monospace;
