@@ -1,17 +1,17 @@
-#wrapper {
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-    font-family: monospace;
-    font-size: 125%;
-}
-
 pre {
     font-family: monospace;
 }
 
 #figlet {
     text-align: center;
+}
+
+#wrapper {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    font-family: monospace;
+    font-size: 125%;
 }
 
 .btn {
@@ -22,10 +22,11 @@ input[type="file"] {
     display: none;
 }
 
-#filein-label {
-    border: 1px solid black;
+#urlin {
+}
+
+#filein-upload {
     display: inline-block;
-    padding: 6px 12px;
     cursor: pointer;
 }
 
@@ -68,7 +69,6 @@ table {
     margin: 0 auto;
 }
 
-
 label {
     font-family: monospace;
 }
@@ -77,10 +77,6 @@ input {
     font-family: monospace;
     font-size: 100%;
 }
-
-.tdtextinput {
-}
-
 
 input[type="text"] {
     width: 14em;
@@ -104,12 +100,4 @@ a:active {
     color: black;
     text-decoration: underline;
 }
-
-/*
-@media only screen and (max-width: 1000px) {
-    label {
-        color: blue;
-    }
-}
-*/
 
