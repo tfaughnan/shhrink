@@ -21,38 +21,39 @@ class ShhrinkDb:
                 CREATE TABLE IF NOT EXISTS shhrink (
                     id      INTEGER PRIMARY KEY AUTOINCREMENT,
                     time    INTEGER NOT NULL,
-                    urlin   TEXT NOT NULL UNIQUE,
-                    urlout  TEXT NOT NULL UNIQUE,
+                    key     TEXT NOT NULL UNIQUE,
+                    value   TEXT NOT NULL UNIQUE,
+                    type    TEXT NOT NULL,
                     clicks  INTEGER NOT NULL DEFAULT 0
                 )
                 ''')
 
-    def add_entry(self, urlin, urlout):
-        values = (int(time.time()), urlin, urlout)
+    def add_entry(self, key, value, type_='url'):
+        values = (int(time.time()), key, value, type_)
         with self.conn:
             c = self.conn.cursor()
             c.execute(
-                'INSERT INTO shhrink (time, urlin, urlout) VALUES (?, ?, ?)',
+                'INSERT INTO shhrink (time, key, value, type) VALUES (?, ?, ?, ?)',
                 values)
 
-    def select_by_urlin(self, urlin):
+    def select_by_value(self, value):
         c = self.conn.cursor()
         c.execute(
-            'SELECT * FROM shhrink WHERE urlin=?',
-            (urlin,))
+            'SELECT * FROM shhrink WHERE value=?',
+            (value,))
         return c.fetchone()
         
-    def select_by_urlout(self, urlout):
+    def select_by_key(self, key):
         c = self.conn.cursor()
         c.execute(
-            'SELECT * FROM shhrink WHERE urlout=?',
-            (urlout,))
+            'SELECT * FROM shhrink WHERE key=?',
+            (key,))
         return c.fetchone()
  
-    def increment_clicks(self, urlout):
-        query = self.select_by_urlout(urlout)
+    def increment_clicks(self, key):
+        query = self.select_by_key(key)
         id_ = query[0]
-        clicks = query[4]
+        clicks = query[5]
 
         with self.conn:
             c = self.conn.cursor()
