@@ -19,11 +19,17 @@
             </pre>
         </div>
         <div class="container">
-            <form method="post" autocomplete="off">
+            <form method="post" enctype="multipart/form-data" autocomplete="off">
                 <table>
                     <tr>
+                        <td></tr>
                         <td align="left"><label for="urlin" >Input:</label></td>
-                        <td class="tdtextinput" align="right"><input type="text" id="urlin" name="urlin" placeholder="long URL" autofocus></td>
+                        <td class="tdtextinput" align="right">
+                            <label for="filein" id="filelin-label">
+                                foo
+                            </label>
+                            <input type="file" id="filein" name="filein">
+                            <input type="text" id="urlin" name="urlin" placeholder="long URL" autofocus></td>
                         <td align="right"><input type="submit" class="btn" id="submit" value="-->"></td>
                     </tr>
                     <tr>

@@ -1,13 +1,18 @@
+import os
 import functools
 from random import randrange
 
 # TODO: reevaluate which imports are actually needed
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_from_directory, make_response
+from werkzeug.utils import secure_filename
 
 from shhrink.db_utils import get_db
 
 # TODO: these should be set by config, loaded in __init__.py
 BASE_URL = 'https://shhr.ink'
+# TODO: mkdir for below if needed
+UPLOAD_FOLDER = '/tmp/shhrink-uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 MAX_ATTEMPTS = 10
 SYMBOLS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -17,7 +22,10 @@ bp = Blueprint('shhrink', __name__)
 def index():
     urlout=''
     if request.method == 'POST':
-        urlout = handle_url_post(request.form['urlin'])
+        if 'filein' in request.files and request.files['filein'].filename != '':
+            urlout = handle_file_post(request.files['filein'])
+        else: 
+            urlout = handle_url_post(request.form['urlin'])
 
     return render_template('index.html', urlout=urlout)
         
@@ -31,8 +39,21 @@ def handle_url_post(urlin):
         else:
             key = generate_key(urlin)
             if key:
-                db.add_entry(key, urlin)
+                db.add_entry(key, urlin, type_='url')
         urlout = urlout_from_key(key)
+
+    return urlout
+
+def handle_file_post(filein):
+    key = generate_key()
+    display_filename = secure_filename(filein.filename)
+    filename = f'{key}_{display_filename}'
+    path = os.path.join(UPLOAD_FOLDER, filename)
+    filein.save(path)
+
+    db = get_db()
+    db.add_entry(key, filename, type_='file')
+    urlout = urlout_from_key(key)
 
     return urlout
 
@@ -48,30 +69,38 @@ def url_endpoint():
 
     return urlout
 
+@bp.route('/file', methods=('GET', 'POST'))
+def file_endpoint():
+    return ''
+
 @bp.route('/<key>')
-def redirection(key):
-    urlout = urlout_from_key(key)
+def keydirect(key):
     db = get_db()
     query = db.select_by_key(key)
     if query:
-        urlin = query[3]
-        redir = redirect(urlin)
+        type_ = query[4]
+        if type_ == 'url':
+            urlin = query[3]
+            content = redirect(urlin)
+        elif type_ == 'file':
+            filename = query[3]
+            content = render_file(filename)
         db.increment_clicks(key)
     else:
-        redir = redirect('/')
-    return redir
+        content = redirect('/')
+    return content
 
-def generate_key(urlin, attempts=0):
+def generate_key(attempts=0):
     if attempts < MAX_ATTEMPTS:
-        key = generate_key(urlin)
+        key = random_key()
         db = get_db()
         if db.select_by_key(key):
-            key = generate_key(urlin, attempts=attempts+1)
+            key = generate_key(attempts=attempts+1)
     else:
         key = None
     return key
 
-def generate_key(urlin):
+def random_key():
     # TODO: don't hardcode 3 below
     key = ''
     N = len(SYMBOLS)
@@ -83,4 +112,14 @@ def generate_key(urlin):
 
 def urlout_from_key(key):
     return f'{BASE_URL}/{key}'
+
+def render_file(filename):
+
+    mimetype = 'text/plain'
+
+
+    return send_from_directory(UPLOAD_FOLDER, filename, mimetype=mimetype)
+    
+
+
 
