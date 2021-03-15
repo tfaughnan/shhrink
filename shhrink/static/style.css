@@ -25,21 +25,11 @@ body, input {
     flex: 0 0 auto;
     display: block;
     text-align: center;
-}
-
-#filein-upload, #filein-delete {
-    display: inline-block;
+    width: 35px;
+    border: 2px solid blue;
+    border-radius: 5px;
+    background: none;
     cursor: pointer;
-    width: 35px;
-    text-align: center;
-}
-
-#submit {
-    width: 35px;
-}
-
-#copy {
-    width: 35px;
 }
 
 input[type="file"] {
@@ -68,6 +58,25 @@ input:read-only {
     flex-direction: row;
 }
 */
+
+footer {
+    font-size: 12px;
+    text-align: center;
+}
+
+footer ul, footer li {
+    display: inline;
+    padding: 0;
+}
+
+footer li::before {
+    content: "|";
+    white-space: nowrap;
+}
+
+footer li:first-child::before {
+    content: "";
+}
 
 a:link {
     color: black;
