@@ -1,9 +1,13 @@
 import os
+import io
+import time
+import hashlib
 import functools
 from random import randrange
 
 # TODO: reevaluate which imports are actually needed
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_from_directory, make_response
+from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
 from shhrink.db_utils import get_db
@@ -25,8 +29,10 @@ def index():
     if request.method == 'POST':
         if 'filein' in request.files and request.files['filein'].filename != '':
             urlout = handle_file_post(request.files['filein'])
-        else: 
+        elif 'urlin' in request.form:
             urlout = handle_url_post(request.form['urlin'])
+        else:
+            return 'Nope', 405
 
     return render_template('index.html', urlout=urlout, max_file_bytes=MAX_FILE_BYTES)
         
@@ -72,7 +78,24 @@ def url_endpoint():
 
 @bp.route('/file', methods=('GET', 'POST'))
 def file_endpoint():
-    return ''
+    urlout = ''
+    if request.method == 'POST':
+        data = list(request.form)[0].encode()
+
+        # TODO: check file size
+        
+        stream = io.BytesIO(data)
+        filename = hash_data(data)
+        filein = FileStorage(stream, filename=filename)
+
+        urlout = handle_file_post(filein)
+
+        try:
+            pass
+        except:
+            pass
+
+    return urlout
 
 @bp.route('/<key>')
 def keydirect(key):
@@ -110,6 +133,11 @@ def random_key():
         n, r = divmod(n, N)
         key = SYMBOLS[r] + key
     return key
+
+def hash_data(data):
+    # TODO: use sha1 instead?
+    # won't increase filename length much
+    return hashlib.md5(data).hexdigest()
 
 def urlout_from_key(key):
     return f'{BASE_URL}/{key}'
