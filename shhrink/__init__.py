@@ -16,9 +16,8 @@ def create_app(test_config=None):
             )
 
     try:
-        os.makedirs(app.instance_path)
         os.makedirs(app.config['UPLOADS_PATH'])
-    except OSError:
+    except OSError as e:
         pass
 
     from shhrink.shhrink import bp
