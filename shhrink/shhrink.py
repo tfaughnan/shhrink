@@ -2,24 +2,18 @@ import os
 import io
 import time
 import hashlib
-import functools
 from random import randrange
 
 # TODO: reevaluate which imports are actually needed
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_from_directory, make_response
+from flask import current_app, Blueprint, redirect, render_template, request, send_from_directory, make_response
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
 from shhrink.db_utils import get_db
 
 # TODO: these should be set by config, loaded in __init__.py
-BASE_URL = 'https://shhr.ink'
-# TODO: mkdir for below if needed
-UPLOAD_FOLDER = '/tmp/shhrink-uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-MAX_FILE_BYTES = 10_000_000
 MAX_ATTEMPTS = 10
-SYMBOLS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 bp = Blueprint('shhrink', __name__)
 
@@ -34,7 +28,7 @@ def index():
         else:
             return 'Nope', 405
 
-    return render_template('index.html', urlout=urlout, max_file_bytes=MAX_FILE_BYTES)
+    return render_template('index.html', urlout=urlout, max_file_bytes=current_app.config['MAX_FILE_BYTES'])
         
 def handle_url_post(urlin):
     urlout = ''
@@ -55,7 +49,7 @@ def handle_file_post(filein):
     key = generate_key()
     display_filename = secure_filename(filein.filename)
     filename = f'{key}_{display_filename}'
-    path = os.path.join(UPLOAD_FOLDER, filename)
+    path = os.path.join(current_app.config['UPLOADS_PATH'], filename)
     filein.save(path)
 
     db = get_db()
@@ -125,30 +119,26 @@ def generate_key(attempts=0):
     return key
 
 def random_key():
+    symbols = current_app.config['KEY_SYMBOLS']
     # TODO: don't hardcode 3 below
     key = ''
-    N = len(SYMBOLS)
+    N = len(symbols)
     n = randrange(0, N**3)
     while n:
         n, r = divmod(n, N)
-        key = SYMBOLS[r] + key
+        key = symbols[r] + key
     return key
 
 def hash_data(data):
-    # TODO: use sha1 instead?
-    # won't increase filename length much
     return hashlib.md5(data).hexdigest()
 
 def urlout_from_key(key):
-    return f'{BASE_URL}/{key}'
+    return f'{current_app.config["SHHRINK_URL"]}/{key}'
 
 def render_file(filename):
 
     mimetype = 'text/plain'
 
 
-    return send_from_directory(UPLOAD_FOLDER, filename, mimetype=mimetype)
-    
-
-
+    return send_from_directory(current_app.config['UPLOADS_PATH'], filename, mimetype=mimetype)
 

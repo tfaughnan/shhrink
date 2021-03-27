@@ -5,7 +5,7 @@ from flask import current_app
 
 def get_db(path=None):
     if path is None:
-        db = ShhrinkDb(current_app.config['DATABASE'])
+        db = ShhrinkDb(current_app.config['DATABASE_PATH'])
     else:
         db = ShhrinkDb(path)
     return db
