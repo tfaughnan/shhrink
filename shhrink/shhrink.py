@@ -2,8 +2,8 @@ import hashlib
 import os
 import random
 
-from flask import (current_app, Blueprint, redirect, render_template, request,
-                   send_from_directory, make_response)
+from flask import (Blueprint, current_app, make_response, redirect,
+                   render_template, request, send_from_directory)
 import magic
 import werkzeug.exceptions
 
