@@ -1,13 +1,10 @@
 import os
-import io
-import time
+import random
 import hashlib
-from random import randrange
 
-# TODO: reevaluate which imports are actually needed
 from flask import current_app, Blueprint, redirect, render_template, request, send_from_directory, make_response
-from werkzeug.datastructures import FileStorage
-from werkzeug.utils import secure_filename
+import werkzeug.exceptions
+import magic
 
 from shhrink.db_utils import get_db
 
@@ -22,22 +19,32 @@ def index():
         elif 'urlin' in request.form:
             urlout = handle_url_post(request.form['urlin'])
         else:
-            return 'Nope', 405
+            output = 'If you\'re trying to POST with cURL, use the appropriate /url or /file endpoint\n'
+            return make_response(output, 405)
 
-    return render_template('index.html', urlout=urlout, max_file_bytes=current_app.config['MAX_FILE_BYTES'])
+    return render_template('index.html', urlout=urlout, max_file_bytes=current_app.config['MAX_CONTENT_LENGTH'])
 
 
 @bp.route('/url', methods=('GET', 'POST'))
 def url_endpoint():
-    urlout = ''
+    output = ''
     if request.method == 'POST':
         try:
-            urlin = list(request.form)[0]
-            urlout = handle_url_post(urlin)
-        except IndexError as e:
-            pass
+            assert len(request.form) == 1
+        except AssertionError as e:
+            output = 'Try something more like the following:\n'
+            output += f'\tcurl -d "$URL" {current_app.config["SHHRINK_URL"]}/url\n'
+            output += 'or alternatively:\n'
+            output += f'\tcurl -F "url=$URL" {current_app.config["SHHRINK_URL"]}/url\n'
+            return make_response(output, 400)
 
-    return urlout
+        urlin = next(request.form.values())
+        if not urlin:
+            urlin = next(request.form.keys())
+        urlout = handle_url_post(urlin)
+        output = f'{urlout}\n'
+
+    return output
 
 def handle_url_post(urlin):
     urlout = ''
@@ -57,32 +64,35 @@ def handle_url_post(urlin):
 
 @bp.route('/file', methods=('GET', 'POST'))
 def file_endpoint():
-    urlout = ''
+    output = ''
     if request.method == 'POST':
-        data = list(request.form)[0].encode()
-
-        # TODO: check file size
-        
-        stream = io.BytesIO(data)
-        filename = hash_data(data)
-        filein = FileStorage(stream, filename=filename)
-
-        urlout = handle_file_post(filein)
-
         try:
-            pass
-        except:
-            pass
+            assert len(request.files) == 1
+        except AssertionError as e:
+            output = 'Try something more like the following:\n'
+            output += f'\tcurl -F "f=@$FILE" {current_app.config["SHHRINK_URL"]}/file\n'
+            return make_response(output, 400)
 
-    return urlout
+        filein = next(request.files.values())
+        urlout = handle_file_post(filein)
+        output = f'{urlout}\n'
+
+    return output
 
 def handle_file_post(filein):
-    key = generate_key()
-    display_filename = secure_filename(filein.filename)
-    filename = f'{key}_{display_filename}'
-    path = os.path.join(current_app.config['UPLOADS_PATH'], filename)
-    filein.save(path)
+    filename = hash_data(filein.read())
 
+    print(f'{filename=}')
+    print(f'{filein.content_length=}')
+    print(f'{filein.content_type=}')
+    print(f'{filein.mimetype=}')
+    print(f'{filein.mimetype_params=}')
+
+    filepath = os.path.join(current_app.config['UPLOADS_PATH'], filename)
+    filein.seek(0)
+    filein.save(filepath)
+
+    key = generate_key()
     db = get_db()
     db.add_entry(key, filename, type_='file')
     urlout = urlout_from_key(key)
@@ -115,18 +125,18 @@ def generate_key(attempts=0):
     else:
         # uhh log something
         pass
+
     return key
 
 def random_key():
-    symbols = current_app.config['KEY_SYMBOLS']
-    # TODO: don't hardcode 3 below
     key = ''
+    symbols = current_app.config['KEY_SYMBOLS']
 
     # Gives us roughly 238k unique keys using a-zA-Z0-9
     # Could allow indefinite number based on current database size,
     # but i'm prob the only person who will use this thing 
     N = len(symbols)
-    n = randrange(0, N**3)
+    n = random.randrange(0, N**3)
 
     while n:
         n, r = divmod(n, N)
@@ -136,13 +146,32 @@ def random_key():
 def urlout_from_key(key):
     return f'{current_app.config["SHHRINK_URL"]}/{key}'
 
+def fmt_bytes(b):
+    if b == 0:
+        return '0 B'
+    k = 1000
+    i = 0
+    sizes = ('B', 'KB', 'MB', 'GB')
+    while b > k:
+        b /= k
+        i += 1
+    return f'{b:.2f} {sizes[i]}'
+
 def hash_data(data):
     return hashlib.md5(data).hexdigest()
 
 def render_file(filename):
-    # TODO: MIME detection
+    filepath = os.path.join(current_app.config['UPLOADS_PATH'], filename)
+    mimetype = magic.from_file(filepath, mime=True)
 
-    mimetype = 'text/plain'
+    # shhrink is a url shortener and pastebin, not a web hosting servce...
+    # so this will prevent browser from rendering uploaded html files
+    if mimetype == 'text/html':
+        mimetype = 'text/plain'
 
-    return send_from_directory(current_app.config['UPLOADS_PATH'], filename, mimetype=mimetype)
+    try:
+        return send_from_directory(current_app.config['UPLOADS_PATH'], filename, mimetype=mimetype)
+    # file was likely deleted on server, so a 410 status code makes more sense than a 404
+    except werkzeug.exceptions.NotFound as e:
+        raise werkzeug.exceptions.Gone
 

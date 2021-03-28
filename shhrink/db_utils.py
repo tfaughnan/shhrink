@@ -22,7 +22,7 @@ class ShhrinkDb:
                     id      INTEGER PRIMARY KEY AUTOINCREMENT,
                     time    INTEGER NOT NULL,
                     key     TEXT NOT NULL UNIQUE,
-                    value   TEXT NOT NULL UNIQUE,
+                    value   TEXT NOT NULL,
                     type    TEXT NOT NULL,
                     clicks  INTEGER NOT NULL DEFAULT 0
                 )
