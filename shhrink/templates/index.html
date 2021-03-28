@@ -56,41 +56,31 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('shhrink.serve_static_page', f='cli') }}">
+                        CLI <i class="fas fa-terminal"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('shhrink.serve_static_page', f='mission') }}">
                         Our Mission <i class="fas fa-rocket"></i>
                     </a>
                 </li>
+                <!--
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('shhrink.serve_static_page', f='faq') }}">
                         FAQ <i class="fas fa-question-circle"></i>
                     </a>
                 </li>
+                -->
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('shhrink.serve_static_page', f='motd') }}">
                         MOTD <i class="far fa-comment-dots"></i>
                     </a>
                 </li>
             </ul>
-
-            <p><i class="far fa-copyright"></i> 2021 Thomas Faughnan</p>
-
             <!--
-            <p>
-                <a href="https://github.com/tfaughnan/shhrink">
-                    contribute
-                    <i class="fa fa-github"></i>
-                    <i class="fab fa-github"></i>
-                    <i class="fab fa-github-square"></i>
-                    <i class="fab fa-git-alt"></i>
-                    <i class="fas fa-code-branch"></i>
-                </a>
-            </p>
-            <p><i class="far fa-copyright"></i>&copy; (C) (c) 2021 Thomas Faughnan</p>
-            <p>LICENSE <i class="fas fa-award"></i> (link)</p>
-            <p>MISSION <i class="fas fa-scroll"></i><i class="fas fa-bullseye"></i>(link)</p>
-            <p>FAQ <i class="far fa-question-circle"></i> (link)</p>
+            <p><i class="far fa-copyright"></i> 2021 shhrink</p>
             -->
         </footer>
     </body>
 </html>
-

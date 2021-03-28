@@ -131,7 +131,7 @@ def generate_key(attempts=0):
     if attempts < current_app.config['MAX_ATTEMPTS']:
         key = random_key()
         db = get_db()
-        if db.select_by_key(key):
+        if db.select_by_key(key) or key in current_app.config['RESERVED_KEYS']:
             key = generate_key(attempts=attempts+1)
     else:
         # uhh log something
@@ -192,3 +192,19 @@ def render_file(filename):
     # status code makes more sense than a 404 Not Found
     except werkzeug.exceptions.NotFound:
         raise werkzeug.exceptions.Gone
+
+
+@bp.route('/fyi/<f>')
+def serve_static_page(f):
+    directory = os.path.join(
+            current_app.root_path,
+            current_app.config['STATIC_PAGE_DIR']
+            )
+    for item in os.listdir(directory):
+        if f == os.path.splitext(item)[0]:
+            f = item
+            break
+    try:
+        return send_from_directory(directory, f)
+    except (werkzeug.exceptions.NotFound):
+        return redirect('/')

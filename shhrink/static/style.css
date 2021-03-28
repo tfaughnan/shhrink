@@ -17,6 +17,7 @@ body, input {
 
 .form-row .input-url {
     flex: 1 1 auto;
+    border: 2px solid black;
     display: block;
     padding: 7px;
 }
@@ -26,9 +27,9 @@ body, input {
     display: block;
     text-align: center;
     width: 35px;
-    border: 2px solid blue;
+    border: 2px solid black;
     border-radius: 5px;
-    background: none;
+    background: lightslategray;
     cursor: pointer;
 }
 
@@ -37,7 +38,7 @@ input[type="file"] {
 }
 
 input:read-only {
-    background-color: thistle;
+    background-color: gainsboro;
 }
 
 /*
@@ -59,7 +60,16 @@ input:read-only {
 }
 */
 
+hr {
+    border: 0;
+    height: 1px;
+    width: 30%;
+    background: #333;
+    background-image: linear-gradient(to right, gainsboro, darkgray, gainsboro);
+}
+
 footer {
+    margin-top: 1cm;
     font-size: 12px;
     text-align: center;
 }
