@@ -160,18 +160,6 @@ def urlout_from_key(key):
     return f'{current_app.config["SHHRINK_URL"]}/{key}'
 
 
-def fmt_bytes(b):
-    if b == 0:
-        return '0 B'
-    k = 1000
-    i = 0
-    sizes = ('B', 'KB', 'MB', 'GB')
-    while b > k:
-        b /= k
-        i += 1
-    return f'{b:.2f} {sizes[i]}'
-
-
 def hash_data(data):
     return hashlib.md5(data).hexdigest()
 
