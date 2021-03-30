@@ -1,6 +1,7 @@
 # shhrink
 
-a url shortener built with flask
+a url shortener and pastebin
 
-try it [here](https://shhr.ink)!
+try it out at [**https://shhr.ink**](https://shhr.ink)
 
+contributions welcome!
