@@ -1,11 +1,11 @@
 use shhr.ink via the command line
------------------------------
+---------------------------------
 url shortener:
     curl -d "$URL" https://shhr.ink/url
 or alternatively
     curl -F "url=$URL" https://shhr.ink/url
 
 pastebin:
-    curl -F "f=@$FILE" https://shhr.ink/url
+    curl -F "f=@$FILE" https://shhr.ink/file
 
 (form field names don't matter)
