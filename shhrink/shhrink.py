@@ -1,6 +1,7 @@
 import hashlib
 import os
 import random
+import re
 
 from flask import (Blueprint, current_app, make_response, redirect,
                    render_template, request, send_from_directory)
@@ -169,9 +170,10 @@ def render_file(filename):
     filepath = os.path.join(uploads_path, filename)
     mimetype = magic.from_file(filepath, mime=True)
 
-    # shhrink is a url shortener and pastebin, not a web hosting servce...
-    # so this will prevent browser from rendering uploaded html files
-    if mimetype == 'text/html':
+    # some browsers (*cough* firefox *cough*) are dumb about rendering
+    # plain text files that don't have a .txt extension
+    # this also prevents browsers from rendering uploaded html files
+    if re.match(r'text/.*', mimetype):
         mimetype = 'text/plain'
 
     try:
